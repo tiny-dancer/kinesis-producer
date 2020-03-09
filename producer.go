@@ -283,11 +283,12 @@ func (p *Producer) flush(records []*kinesis.PutRecordsRequestEntry, reason strin
 		p.Logger.Info(
 			"put failures",
 			LogValue{"failures", failed},
+			LogValue{"records", len(out.Records)},
 			LogValue{"backoff", duration.String()},
 		)
 		time.Sleep(duration)
 
-		// change the logging state for the next itertion
+		// change the logging state for the next iteration
 		reason = "retry"
 		records = failures(records, out.Records)
 	}
